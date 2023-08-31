@@ -127,13 +127,13 @@ st.write(
 
 st.title("Hypothesis 3: What school have highest yield for draft picks")
 #code
-fc = df['school'].value_counts().reset_index()
-fc = fc.rename(columns={
-  'index': 'school',
-  'school': 'count'
-})  # Renaming columns
+fc = df['school'].value_counts()
+# fc = fc.rename(columns={
+#   'index': 'school',
+#   'school': 'count'
+# })  # Renaming columns
 
-fig = px.bar(fc, x='school', y='count')  # Use 'school' as the x-axis
+fig = px.bar(fc)  # Use 'school' as the x-axis
 st.plotly_chart(fig, use_container_width=True)
 st.write(
   "The graph and chart showed me that the school with the highest yield for draft picks is Kentucky."
