@@ -103,7 +103,9 @@ fig1.update_layout(title='Height Distribution')
 st.plotly_chart(fig1)
 
 # Summary
-st.write("I found average player height tallest player height and shortest player height tallest height was 80 inch average was 78 inch and the shortest height was 68 inch")
+st.write(
+  "I found average player height tallest player height and shortest player height tallest height was 80 inch average was 78 inch and the shortest height was 68 inch"
+)
 
 st.title("Hypothesis 2: Most common name of NBA players")
 #code
@@ -114,12 +116,19 @@ st.write(
   " I found out from the bar graph and data chart that the most common first name is Jalen."
 )
 
-# Hypothesis 3: What school have highest yield for draft picks (Natalie)
+st.title("Hypothesis 3: What school have highest yield for draft picks")
 #code
 fc = df['school'].value_counts().reset_index()
-fig = px.bar(fc, x='index', y='school')
-fig.show()
-#analysis: The graph and chart showed me that the school with the highest yield for draft picks is Kentucky.
+fc = fc.rename(columns={
+  'index': 'school',
+  'school': 'count'
+})  # Renaming columns
+
+fig = px.bar(fc, x='school', y='count')  # Use 'school' as the x-axis
+st.plotly_chart(fig, use_container_width=True)
+st.write(
+  "The graph and chart showed me that the school with the highest yield for draft picks is Kentucky."
+)
 
 st.title("Hypothesis 4: What's the average weight?")
 fig1 = px.box(df['weight'])
