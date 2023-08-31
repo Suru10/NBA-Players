@@ -3,222 +3,183 @@ import streamlit as st
 import pandas as pd
 import warnings
 import plotly.express as px
-import matplotlib.pyplot as plt
-import seaborn as sns
+from datetime import datetime
 
 warnings.filterwarnings("ignore")
 
-# Team 1: Seth F., Kavya -> bottom
-# Team 2:emilia, Jemiah -> top
-#Introductions:
-st.subheader('Tranquil Tiramisus')
+import matplotlib.pyplot as plt
+import numpy as np
 
+df = pd.read_csv('players.csv')
+# top (inspection + cleaning)  Riley
+# graph 1-5 Warik
+# graph 6-7 + conclusion Natalie
+st.subheader('Fancy Fondue')
 st.write(
-  'Hi, my name is Seth Fung and I reside in BC Canada. I just started to learn coding this year and look forward to continuing to code.'
+  'Hi my name is Riley, I am a sophomore, and I have experience with python,pandas, plotly, and torch, and have been programming with multiple languages in the past 2.5 years.'
 )
+st.write('--------WARIK—--------')
+st.write('--------------NATALIE—------------')
+
+#TITLE
+st.title('NBA Player Statistics EDA')
 st.write(
-  'Hi! I am Kavya and I am a sophomore. I live in Washington. I have coding experience in mostly HTML, Java, and Python. I have created a few projects and I am so excited to continue expanding my knowledge on coding.'
+  "This dataset was formulated for the statistics of NBA players. This includes Data about all NBA players active during 2022-2023 season including: First and last name, Position, Height and weight, Date of birth, Country of origin, Last attended school and Draft info. We utilized this raw data and got a better understanding of the statistics of NBA players. The Dataset was sourced from kaggle and last updated on August 14th 2023."
 )
-st.write(
-  'Hi, Im emilia and Im 16 years old going on my senior year. I live in San Diego, CA. I have got experience in HTML, JavaScript, and python.'
-)
-st.write(
-  'Hi, my name is Jemiah! I am 16 and I live in Alberta, Canada. I am new to coding and I look forward to broadening my experiences with coding and technology.'
-)
-#Title:
-st.title("GPA and IQ EDA")
-st.write(
-  "This dataset looks at 78 students and 5 variables: obs, gpa, iq, gender, and concept. We will look at how each of the variables affect each other."
-)
-df = pd.read_csv(
-  "https://raw.githubusercontent.com/Suru10/GPA-and-IQ/main/gpa_iq.csv")
-st.subheader('Inspection')
-# st.divider()
-st.write('Lets take a quick look at the data')
+
+#Inspection:
+st.header('Inspection')
+st.markdown("""---""")
+# 1) Showing some Data
+st.subheader('LET\'S LOOK AT THE DATA')
 st.write(df.head())
-st.write("Description of the data")
-st.write(df.describe())
-st.write("Shape of the data -rows and columns")
-st.write(df.shape)
-st.write(
-  'There are only three relevent points: gpa, gender, and iq - all of which are represented as numerical values. We dropped the columns labeled obs and concept due to their irrelevance'
+st.write('Here we are displaying a small portion of what our data looks like')
+st.write("\n")
+col1, col2 = st.columns(2)
+# 3) Null values
+col1.markdown('NULL VALUES')
+col1.write(df.isna().sum())
+col1.write('Here we are displaying the number of null values for each feature')
+# 4) Stat Values
+col2.markdown('THE STATS')
+col2.write(df.describe())
+col2.write('These are the statistical values of the current quantitative data')
+st.write("\n")
+st.subheader("Inspection Summary")
+st.markdown(
+  "In inspection we learned, the min and max values of the quantatitive values, we learned about which possible features we should drop in our dataset, and we learned where our null values are. "
 )
+st.markdown("""---""")
 
-# Inspection
-# head
-#df.head()
-#df.describe()
-#df.shape
-
-# Cleaning
-# There is no missing info
-st.divider()
-st.title("Cleaning the Data")
+#Cleaning:
+st.header('Cleaning the Data')
+#Removing all rows that contain null values
+col1, col2 = st.columns(2)
+col1.markdown('NULL VALUES BY COLUMN')
+col1.write(df.isna().sum())
+df[['Feet', 'Inches']] = df['height'].str.split('-', expand=True)
+df['HeightInches'] = df['Feet'].astype(int) * 12 + df['Inches'].astype(int)
+df = df.drop(['Feet', 'Inches'], axis=1)
+columns_to_drop = df[['draft_round', 'draft_number']]
+df.drop(columns_to_drop, axis=1, inplace=True)
+df.head(1)
+#filtered_df = df[df[['fname', 'lname', 'school']].isna().any(axis=1)]
+df.loc[28, 'school'] = "Saint Joseph's Preparatory School"
+df.loc[50, 'school'] = "Argentina"
+df.loc[81, 'school'] = "Cordoba High School"
+df.loc[120, 'school'] = "Saint Mary's"
+df.loc[192, 'school'] = "Little Elm"
+df.loc[210, 'school'] = "Spain"
+df.loc[231, 'school'] = "Brazzaville High School"
+df.loc[313, 'school'] = "EuroLeague"
+df.loc[368, 'school'] = "Trinity International School"
+df.loc[453, 'school'] = "EuroLeague"
+df["Date coverted"] = pd.to_datetime(df["birthday"])
+col2.markdown('AFTER CLEANING')
+col2.write(df.isna().sum())
+st.subheader("Reasoning:")
 st.write(
-  "To clean the dataset we removed columns that were not relevant to our analysis as well as checked if the data had null values and there were none."
+  "Dropped all rows with null values contained in them, and rows that served no purpose for further data analysis. This was necessary in order to keep a consistent dataset with the least amount of gaps. We also manually researched the data to completely fill up the ‘school’ column."
 )
-st.write("Post-processing head")
-columns_dropped = ["obs", "concept"]
-df.drop(columns_dropped, axis=1, inplace=True)
-st.write(df.head())
-st.write("Post-processing null vaues")
-st.write(df.isna().sum())
+st.markdown("""---""")
+#Removing the 'playerid' Column
+col1, col2 = st.columns(2)
+column_to_drop = ['playerid']
+df.drop(column_to_drop, axis=1, inplace=True)
+col1.markdown("DATA AFTER REMOVING THE ‘'playerid’ COLUMN")
+col1.write(df.head(5))
+col2.subheader("Reasoning:")
+col2.write(
+  "Dropped the ‘playerid’ column as it was not needed for the analysis and would serve no value to answering any of the hypotheses."
+)
+st.markdown("")
 
 # Visualizations:
-# Team 1: Kavya, Seth
-# Team 2:Jemiah, emilia
+st.header('The Organized Data')
+st.subheader("HYPOTHESIS 1: What is the average height of an NBA player?")
+average_height_inches = df['HeightInches'].mean()
+fig1 = px.box(df, y='HeightInches', labels={'HeightInches': 'Height (inches)'})
+fig1.update_layout(title='Height Distribution')
+st.plotly_chart(fig1)
 
-st.divider()
+# Summary
+st.write("I found average player height tallest player height and shortest player height tallest height was 80 inch average was 78 inch and the shortest height was 68 inch")
 
-st.header("Hypothesis 1: What is the correlation between IQ and GPA?")
-# code the visual
-st.write("Plot 1a")
-fig1 = plt.figure(figsize=(10, 4))
-sns.lineplot(x="iq", y="gpa", data=df)
-st.pyplot(fig1)
-
-st.write("Plot 1b")
-fig2 = plt.figure(figsize=(10, 4))
-sns.lineplot(x="iq", y="gpa", hue="gender", data=df)
-st.pyplot(fig2)
-
-st.write("Plot 1c")
-fig3 = px.scatter(df, x="iq", y="gpa", color="gender")
-st.plotly_chart(fig3, use_container_width=True)
-
-st.subheader("Analysis")
+st.title("Hypothesis 2: Most common name of NBA players")
+#code
+fc = df['fname'].value_counts().reset_index()
+fig = px.bar(fc, x='index', y='fname')
+st.plotly_chart(fig, use_container_width=True)
 st.write(
-  "My initial hypothesis for the question What is the correlation between IQ and GPA? was that a higher IQ would lead to a higher GPA. So to test this hypothesis, I created graphs with x = IQ and y = GPA:"
-)
-st.write(
-  "Two line graphs, one showing the average IQ to GPA relation between both genders and another showing the IQ to GPA relation for each gender, with pink = gender 1 and black = gender 2."
-)
-st.write(
-  "Both of these graphs displayed a strong-positive correlation of IQ to GPA for gender 1 and a weak-positive correlation of IQ to GPA for gender 2; which roughly proved my initial hypothesis that as IQ increases, so does GPA."
+  " I found out from the bar graph and data chart that the most common first name is Jalen."
 )
 
-st.write(
-  "To further solidify the initial conclusion, I created a third graph/ a scatter plot where x = IQ and y = GPA and gender 1 = Blue and gender 2 = Yellow. Much like the previous graphs, the scatter plot showed that there was a strong-positive correlation of IQ to GPA for gender 1 and a weak-positive correlation of IQ to GPA for gender 2."
-)
-st.write(
-  "It is very important to note that the data was inconsistent; there were many outliers in the data, for example, the person with the highest IQ in both genders had a lower GPA than some people who had lower IQ, not to mention that there were many other spikes in the graphs that displayed someone with a lower IQ having a far higher GPA than that of someone with higher IQ. And at some points in the graphs, it seemed as if as IQ increases, GPA decreases."
-)
-st.write(
-  "Despite all that, the trends of the graphs do show weak and strong positive correlations between IQ and GPA for both genders which tells us that generally speaking, IQ does somewhat correlate to GPA."
-)
-st.write(
-  "In conclusion, IQ somewhat affects GPA and in general, when you have a higher IQ, you will also have a higher GPA. This may not be the case for everyone though as this data set excluded the students environments, as well as numerous other factors that also affect GPA."
-)
-st.divider()
+# Hypothesis 3: What school have highest yield for draft picks (Natalie)
+#code
+fc = df['school'].value_counts().reset_index()
+fig = px.bar(fc, x='index', y='school')
+fig.show()
+#analysis: The graph and chart showed me that the school with the highest yield for draft picks is Kentucky.
 
-st.header("Hypothesis 2: Is there a correlation between IQ and Gender?")
-
-st.write("Plot 2a")
-fig4 = plt.figure(figsize=(10, 4))
-sns.lineplot(x='gpa', y='gender', hue='iq', data=df)
-st.pyplot(fig4)
-
-st.write("Plot 2b")
-sns.set_theme()
-fig5 = plt.figure(figsize=(10, 4))
-sns.scatterplot(x="gpa", y="iq", hue="gender", data=df)
-st.pyplot(fig5)
-
-#st.write("Plot 2c")
-#fig6 = plt.figure(figsize=(10, 4))
-#df.plot.scatter(x='iq', y='gpa')
-#st.pyplot(fig6)
-
-st.write("Plot 2c")
-sns.set_theme()
-fig6 = plt.figure(figsize=(10, 4))
-sns.scatterplot(x="iq", y="gender", hue="gpa", data=df)
-st.pyplot(fig6)
-
-st.write("Plot 2d")
-fig7 = plt.figure(figsize=(10, 4))
-sns.barplot(x='gender', y='iq', estimator='std', data=df)
-st.pyplot(fig7)
-
-st.subheader("Analysis")
-
-st.write(
-  "Initially, I assumed there would be no correlation whatsoever between gender and iq, but upon furthur analysis of the data it seems that according to this study one gender is slightly superior in this measure."
-)
-
-st.write(
-  "The difference is so slight it was difficult to notice within scatterplots and line graphs, but a barplot gave a much clearer picture. Gender 1 was shown to have on average a higher iq than gender 2, but alas, no one knows which gender is which."
-)
-
-st.write(
-  "In conclusion, gender seems to have a correlation to an individual's iq, albeit extraodinarily slight and dependent on a rather dodgy dataset."
-)
-
-st.divider()
-
-st.header("#Hypothesis 3: Does gender affect gpa?")
-st.write(
-  'Before I examined the data, my hypothesis for the question "Does gender affect GPA?" was no. I did not believe there was any correlation. To determine if this was true I made a scatter plot to see if there was any correlation.'
-)
-st.write("Plot 3a")
-fig1 = px.scatter(
-  df,
-  x="gpa",
-  y="gender",
-  color="gpa",
-)
+st.title("Hypothesis 4: What's the average weight?")
+fig1 = px.box(df['weight'])
 st.plotly_chart(fig1, use_container_width=True)
 st.write(
-  'For both gender 1 and gender 2, the gpa values seem to be in a straight line, which means that each gender had a variety of GPA values. This shows that there is no correlation.'
-)
-st.write(
-  'However, gender 2 did have a few people who had lower GPAs than gender 1. This might just be a coincidence or it might show that gender 2 typically has a smaller minimum GPA than gender 1. Also, it did seem like gender 2 had more GPA values below four than gender 1. To examine this further, I took the average gpa for both genders and made a bar plot. '
-)
-st.write("Plot 3b")
-new_df = df.groupby('gender')['gpa'].mean()
-figbar = px.bar(new_df, y="gpa")
-st.plotly_chart(figbar, use_container_width=True)
-
-st.write(
-  "The bar plot showed that gender 1 had a slightly higher average GPA. So, According to the data, there is mostly no correlation between gender and GPA. However, gender 1 tends to have somewhat higher GPAS."
+  "From this graph we can see that the median weight for an NBA player is 215 pounds. The minimum weight was 160 pounds, while the maximum was 290. From this graph we can see how much the average NBA player weighes as a median value, and other values."
 )
 
-st.divider()
-st.header("#Hypothesis 4: Correlation Heatmap")
-st.write(
-  "To show how GPA, IQ, and gender correspond to each other I made a correlation heatmap that compares all the possible relations through color. "
-)
-st.write("Plot 4a")
-df_heatmap = plt.figure()  # imp! create a fig.
-sns.heatmap(
-  df.corr(),
-  vmin=-1,
-  vmax=1,
-  annot=True,
-  cmap='BrBG',
-)
-#df_heatmap.set_title('Correlation Heatmap', fontdict={'fontsize': 12}, pad=12)
-st.pyplot(df_heatmap)
+st.title("Hypothesis 5:Most common birth year aka average age ")
+
+df['birthday'] = pd.to_datetime(df['birthday'])
+
+now = datetime.now()
+df['age'] = (now - df['birthday']).astype('<m8[Y]')
+
+fig2 = px.scatter(df, x='birthday', y='age')
+
+fig2.update_layout(title='Average Age', xaxis_title='', yaxis_title='Age')
+st.plotly_chart(fig2, use_container_width=True)
 
 st.write(
-  'The colorbar on the right displays a gradient going from a dark teal to light gray to dark orange. The darkest teal represents a perfect positive correlation at 1,the light gray in the very middle represents no correlation at 0, and the darkest orange represents a perfect negative correlation at -1. Disregarding the correlation each of the variables to itself, all of which had the darkest teal(1), the highest correlation was between IQ and GPA with a moderate teal color and a value of 0.63. Gender and IQ had a much lower correlation with the color being a light teal and the value 0.19. The relationship with the least correlation was between gender and gpa with a light orange color and a value of -0.097.'
-)
-st.write(
-  'To reinforce this I created a scatter matrix showcasing and comparing all the relationships.'
+  "Another Hypothesis of mine would be that the players with the higher ages have better average stats than those under 30. As the players above 30 have prved themselves through long careers and the under 20 players are mostly rookies and players who will have shorter careers. Here we examine the average age of an NBA player. as we can see, the age is generally under 30 with consistant players. After age 30 the amount of players starts to drop off."
 )
 
-st.write("Plot 4b")
-df_list = df[['gpa', 'iq', 'gender']]
-df_scatter = px.scatter_matrix(df_list)
-st.plotly_chart(df_scatter, use_container_width=True)
+st.title("Hypothesis 6: Height Weight Correlation")
+fig = px.scatter(df, x='HeightInches', y='weight')
+fig.update_layout(title='Height and Weight Correlation',
+                  xaxis_title='Height (Inches)',
+                  yaxis_title='Weight (Pounds)')
+st.plotly_chart(fig, use_container_width=True)
+
 st.write(
-  ' Here it shows GPA and IQ as a weak positive correlation. While gender can be observed as having no correlation to either IQ or GPA, it can be seen very slightly on the correlation heatmap and scatter matrix that gender has a weak correlation to both GPA and IQ due to only a small amount of values.'
+  "In this graph we set out to examine the corralation between player's height and weight. We can tell from the graph below that weight and height are heavily correlated,the graph shows that the height/weight correlation works in acending values of weight based on increasing height. We observe a range of weight for evry height, but the incline of height-weight is consistant"
+)
+
+st.header("Hypothesis 7: Height Weight Correlation to Position")
+avg_hw_data = df.groupby('position')[['HeightInches',
+                                      'weight']].mean().reset_index()
+
+fig3 = px.bar(avg_hw_data,
+              x='position',
+              y=['HeightInches', 'weight'],
+              title='Average Height and Weight by Position',
+              labels={
+                'position': 'Position',
+                'value': 'Value'
+              },
+              color_discrete_map={
+                'HeightInches': 'blue',
+                'weight': 'red'
+              })
+
+fig3.update_layout(barmode='group', xaxis_title='Position')
+fig3.update_yaxes(
+  title_text='Average Value, Blue is in Inches, Red is in Pounds')
+
+st.plotly_chart(fig3, use_container_width=True)
+st.write(
+  "In this Graph we looked at the correlation between players weight/height and position. Based on the presuppostion that NBA players are selected for there respective postion based on physical factors. The chart confirms our hypothesis, with centers having the highest average height and weight."
 )
 
 st.title("Conclusion")
-st.write(
-  "To summarize our 4 analyses on the correlations between GPA, IQ, and Gender, we reached the conclusion that generally speaking, those with a higher IQ would tend to have a higher GPA. We also came to the conclusion that gender has little to no effect on IQ and GPA."
-)
-st.write(
-  "In conclusion, there is a slight positive correlation between IQ and GPA, and there is a very slight correlation between gender and IQ and gender and GPA."
-)
+st.write("write small paragraph about dataset, and what you found out")
