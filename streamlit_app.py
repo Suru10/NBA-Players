@@ -112,9 +112,10 @@ st.title("Hypothesis 2: Most common name of NBA players")
 fc = df['fname'].value_counts().reset_index()
 fc = fc.rename(columns={
   'index': 'fname',
-  'fname': 'count'
+  'fname': 'counts'
 })  # Renaming columns
-fig = px.bar(fc, x='fname', y='count')
+print(fc.head())
+fig = px.bar(fc, x='fname', y='counts')
 st.plotly_chart(fig, use_container_width=True)
 st.write(
   " I found out from the bar graph and data chart that the most common first name is Jalen."
