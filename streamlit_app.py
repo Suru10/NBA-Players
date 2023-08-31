@@ -111,13 +111,13 @@ st.title("Hypothesis 2: Most common name of NBA players")
 #code
 fc = df['fname'].value_counts().reset_index()
 fc = fc.rename(columns={
-  'index': 'fname',
+  'index': 'fnames',
   'fname': 'counts'
 })  # Renaming columns
 
 print(fc.head())
 
-fig = px.bar(fc, x='fname', y='counts')
+fig = px.bar(fc, x='fnames', y='counts')
 st.plotly_chart(fig, use_container_width=True)
 
 st.write(
