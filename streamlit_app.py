@@ -114,9 +114,12 @@ fc = fc.rename(columns={
   'index': 'fname',
   'fname': 'counts'
 })  # Renaming columns
+
 print(fc.head())
+
 fig = px.bar(fc, x='fname', y='counts')
 st.plotly_chart(fig, use_container_width=True)
+
 st.write(
   " I found out from the bar graph and data chart that the most common first name is Jalen."
 )
