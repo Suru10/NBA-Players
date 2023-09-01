@@ -18,7 +18,9 @@ st.subheader('Fancy Fondue')
 st.write(
   'Hi my name is Riley, I am a sophomore, and I have experience with python,pandas, plotly, and torch, and have been programming with multiple languages in the past 2.5 years.'
 )
-st.write('--------WARIK—--------')
+st.write(
+  'My name is Warik I am a sophmore i started coding with scratch when I was in grade 2 I have also coded in languages such as python and java making a game.'
+)
 st.write('--------------NATALIE—------------')
 
 #TITLE
@@ -96,7 +98,7 @@ st.markdown("")
 
 # Visualizations:
 st.header('Analysis')
-st.subheader("HYPOTHESIS 1: What is the average height of an NBA player?")
+st.title("HYPOTHESIS 1: What is the average height of an NBA player?")
 average_height_inches = df['HeightInches'].mean()
 fig1 = px.box(df, y='HeightInches', labels={'HeightInches': 'Height (inches)'})
 fig1.update_layout(title='Height Distribution')
@@ -136,7 +138,7 @@ fc = df['school'].value_counts()
 fig = px.bar(fc)  # Use 'school' as the x-axis
 st.plotly_chart(fig, use_container_width=True)
 st.write(
-  "The graph and chart showed me that the school with the highest yield for draft picks is Kentucky."
+  "The graph and chart showed me that the school with the highest yield for draft picks is Kentucky with 28. Our second school with the most drafts is Duke with 26. And third much further down is arizona at 14"
 )
 
 st.title("Hypothesis 4: What's the average weight?")
@@ -200,4 +202,6 @@ st.write(
 )
 
 st.title("Conclusion")
-st.write("To conclude, we learned many things from this dataset. Our hypothesis revealed a new side of the dataset, and showed the power of data analysis. Through course and project we learned many applicable skills. ")
+st.write(
+  "To conclude, we learned many things from this dataset. Our hypothesis revealed a new side of the dataset, and showed the power of data analysis. Through course and project we learned many applicable skills. "
+)
