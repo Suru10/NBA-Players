@@ -153,7 +153,8 @@ st.title("Hypothesis 5:Most common birth year aka average age ")
 df['birthday'] = pd.to_datetime(df['birthday'])
 
 now = datetime.now()
-df['age'] = (now - df['birthday']).dt.total_seconds()
+# df['age'] = (now - df['birthday']).dt.total_seconds() 
+df['age'] = (now - df['birthday']).astype('<m8[Y]')
 
 fig2 = px.scatter(df, x='birthday', y='age')
 
