@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import warnings
 import plotly.express as px
-from datetime import datetime
+from datetime import datetime, timedelta
 
 warnings.filterwarnings("ignore")
 
@@ -154,7 +154,7 @@ df['birthday'] = pd.to_datetime(df['birthday'])
 
 now = datetime.now()
 # df['age'] = (now - df['birthday']).dt.total_seconds() 
-df['age'] = (now - df['birthday']).astype('<m8[Y]')
+df['age'] = (now - df['birthday']) / timedelta(days=365) 
 
 fig2 = px.scatter(df, x='birthday', y='age')
 
