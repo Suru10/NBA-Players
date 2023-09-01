@@ -95,7 +95,7 @@ col2.write(
 st.markdown("")
 
 # Visualizations:
-st.header('The Organized Data')
+st.header('Analysis')
 st.subheader("HYPOTHESIS 1: What is the average height of an NBA player?")
 average_height_inches = df['HeightInches'].mean()
 fig1 = px.box(df, y='HeightInches', labels={'HeightInches': 'Height (inches)'})
@@ -104,7 +104,7 @@ st.plotly_chart(fig1)
 
 # Summary
 st.write(
-  "I found average player height tallest player height and shortest player height tallest height was 80 inch average was 78 inch and the shortest height was 68 inch"
+  "I found average player height tallest player height and shortest player height tallest height was 88 inch average was 78 inch and the shortest height was 69 inch"
 )
 
 st.title("Hypothesis 2: Most common name of NBA players")
@@ -122,7 +122,7 @@ fig = px.bar(fc)
 st.plotly_chart(fig, use_container_width=True)
 
 st.write(
-  " I found out from the bar graph and data chart that the most common first name is Jalen."
+  " We found out from the bar graph and data chart that the most common first name is Jalen, and Isaiah with 8 counts. Next commono named were Josh, and Jordan had 7 counts. "
 )
 
 st.title("Hypothesis 3: What school have highest yield for draft picks")
