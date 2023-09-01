@@ -200,4 +200,4 @@ st.write(
 )
 
 st.title("Conclusion")
-st.write("write small paragraph about dataset, and what you found out")
+st.write("To conclude, we learned many things from this dataset. Our hypothesis revealed a new side of the dataset, and showed the power of data analysis. Through course and project we learned many applicable skills. ")
